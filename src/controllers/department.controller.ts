@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response} from "express";
 import { StatusCodes } from "http-status-codes";
-import createError from "http-errors";
+import catchError from "http-errors";
 import { Department } from "../models/department.model";
 
 const prisma = new PrismaClient();
@@ -29,7 +29,7 @@ const deleteDepartment = async(req: Request, res: Response) => {
     });
 
     if(!department){
-        throw createError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
+        throw catchError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
     }
 
     const deletedDepartment = await prisma.department.delete({
@@ -51,7 +51,7 @@ const editDepartment = async(req: Request, res: Response) => {
     });
 
     if(!department){
-        throw createError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
+        throw catchError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
     }
 
     const updatedDepartment = await prisma.department.update({
@@ -85,7 +85,7 @@ const getDepartmentById = async(req: Request, res: Response) => {
     });
 
     if(!department){
-        throw createError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
+        throw catchError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
     }
 
     res.status(StatusCodes.OK).json(department);

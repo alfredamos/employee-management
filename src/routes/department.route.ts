@@ -1,5 +1,10 @@
 import { Router } from "express";
 
+
+import { checkIfAuthenticatedMiddleware } from "../middleware/check-if-authenticated.middleware";
+import { checkIfAdmin } from "../middleware/check-if-admin.middleware";
+
+
 import {
     createDepartment,
     deleteDepartment,
@@ -13,12 +18,23 @@ import { departmentValidationMiddleware } from "../middleware/department-validat
 const router = Router();
 
 router.route('/')
-    .get(getAllDepartments)
-    .post(departmentValidationMiddleware, createDepartment);
+    .get(
+        checkIfAuthenticatedMiddleware, 
+        getAllDepartments)
+    .post(
+        departmentValidationMiddleware, 
+        checkIfAuthenticatedMiddleware, checkIfAdmin, 
+        createDepartment);
 
-router.route('/:id')
-    .delete(deleteDepartment)
-    .get(getDepartmentById)
-    .patch(departmentValidationMiddleware, editDepartment);
+router
+  .route("/:id")
+  .delete(checkIfAuthenticatedMiddleware, checkIfAdmin, deleteDepartment)
+  .get(checkIfAuthenticatedMiddleware, getDepartmentById)
+  .patch(
+    departmentValidationMiddleware,
+    checkIfAuthenticatedMiddleware,
+    checkIfAdmin,
+    editDepartment
+  );
 
 export default router;

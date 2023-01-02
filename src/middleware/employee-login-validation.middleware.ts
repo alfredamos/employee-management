@@ -2,9 +2,9 @@ import createError from "http-errors";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Employee } from "../models/employee.model";
-import { employeeValidation } from "../validations/employee.validation";
+import { employeeLoginValidation } from "../validations/employee-login.validation";
 
-export const employeeValidationMiddleware = (
+export const employeeLoginValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -12,14 +12,10 @@ export const employeeValidationMiddleware = (
   const { body: employ } = req;
   const employee = employ as Employee;
 
-  const { error, value } = employeeValidation(employee);
+  const { error, value } = employeeLoginValidation(employee);
 
   if (error) {
     let errorMessages: string;
-
-    /* for (const err of error.details) {
-      errorMessages.push(err.message);
-    } */
 
     errorMessages = error.details.map(err => err.message).join('. ');
 

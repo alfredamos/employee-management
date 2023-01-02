@@ -5,6 +5,7 @@ require("express-async-errors");
 
 dotenv.config();
 
+import authRoute from "./routes/auth.route";
 import departmentRoute from "./routes/department.route";
 import employeeRoute from "./routes/employee.route";
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 
+app.use('/api/auth', authRoute);
 app.use('/api/departments', departmentRoute);
 app.use('/api/employees', employeeRoute);
 

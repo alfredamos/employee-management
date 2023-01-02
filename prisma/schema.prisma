@@ -18,17 +18,26 @@ model Department{
 }
 
 model Employee{
+  @@map("employees")
   id String @id @default(uuid())  
   fullName String @db.VarChar(255)
-  email String @db.VarChar(255) 
-  phone String 
+  email String @unique @db.VarChar(255) 
+  phone String  @db.VarChar(255)
+  password String @db.VarChar(255)
   birthDate DateTime
   gender Gender
-  department Department? @relation(fields: [departmentId], references: [id])
-  departmentId String?
+  userType UserType @default(Staff)
+  department Department @relation(fields: [departmentId], references: [id])
+  departmentId String
 }
 
 enum Gender {
   Female
   Male
+}
+
+enum UserType{
+  Staff
+  Admin
+  Management
 }

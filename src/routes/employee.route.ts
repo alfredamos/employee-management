@@ -1,5 +1,8 @@
 import { Router } from "express";
 
+import { checkIfAuthenticatedMiddleware } from "../middleware/check-if-authenticated.middleware";
+import { checkIfAdmin } from "../middleware/check-if-admin.middleware";
+
 import {
     createEmployee,
     deleteEmployee,
@@ -12,13 +15,25 @@ import { employeeValidationMiddleware } from "../middleware/employee-validation.
 
 const router = Router();
 
-router.route('/')
-    .get(getAllEmployees)
-    .post(employeeValidationMiddleware, createEmployee);
+router
+  .route("/")
+  .get(checkIfAuthenticatedMiddleware, getAllEmployees)
+  .post(
+    employeeValidationMiddleware,
+    checkIfAuthenticatedMiddleware,
+    checkIfAdmin,
+    createEmployee
+  );
 
-router.route('/:id')
-    .delete(deleteEmployee)
-    .get(getEmployeeById)
-    .patch(employeeValidationMiddleware, editEmployee);
+router
+  .route("/:id")
+  .delete(checkIfAuthenticatedMiddleware, checkIfAdmin, deleteEmployee)
+  .get(checkIfAuthenticatedMiddleware, getEmployeeById)
+  .patch(
+    employeeValidationMiddleware,
+    checkIfAuthenticatedMiddleware,
+    checkIfAdmin,
+    editEmployee
+  );
 
 export default router;
