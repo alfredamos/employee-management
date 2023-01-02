@@ -1,14 +1,32 @@
-import { db } from "../db";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response} from "express";
 import { StatusCodes } from "http-status-codes";
 import createError from "http-errors";
 import { Employee } from "../models/employee.model";
 
+const prisma = new PrismaClient();
+
 const createEmployee = async(req: Request, res: Response) => {
     const {body: employToUpdate} = req;
     const employee = employToUpdate as Employee;
 
-    const createdEmployee = await db.employee.create({
+    const birthDate = employee.birthDate;
+
+    if (typeof birthDate === "string"){
+        employee.birthDate = new Date(birthDate);
+    }
+
+    const departmentId = employee.departmentId;
+
+    const department = await prisma.department.findUnique({
+        where: {id : departmentId}
+    })
+
+    if (!department){
+        throw createError(StatusCodes.NOT_FOUND, `Department does not exist`);
+    }
+
+    const createdEmployee = await prisma.employee.create({
         data: {...employee},
     });
 
@@ -19,7 +37,7 @@ const createEmployee = async(req: Request, res: Response) => {
 const deleteEmployee = async(req: Request, res: Response) => {
     const {id} = req.params;
     
-    const employee = await db.employee.findUnique({
+    const employee = await prisma.employee.findUnique({
         where: {id},
     });
 
@@ -27,7 +45,7 @@ const deleteEmployee = async(req: Request, res: Response) => {
         throw createError(StatusCodes.NOT_FOUND, `Employee with id = ${id} is not found.`);
     }
 
-    const deletedEmployee = await db.employee.delete({
+    const deletedEmployee = await prisma.employee.delete({
         where: {id},
     })
 
@@ -41,15 +59,31 @@ const editEmployee = async(req: Request, res: Response) => {
 
     const {id} = req.params;
     
-    const employee = await db.employee.findUnique({
+    const employee = await prisma.employee.findUnique({
         where: {id},
     });
 
     if(!employee){
         throw createError(StatusCodes.NOT_FOUND, `Employee with id = ${id} is not found.`);
+    }    
+
+    const birthDate = employeeToUpdate.birthDate;
+
+    if (typeof birthDate === "string"){
+        employeeToUpdate.birthDate = new Date(birthDate);
     }
 
-    const updatedEmployee = await db.employee.update({
+    const departmentId = employeeToUpdate.departmentId;
+
+    const department = await prisma.department.findUnique({
+        where: {id : departmentId}
+    })
+
+    if (!department){
+        throw createError(StatusCodes.NOT_FOUND, `Department does not exist`);
+    }
+
+    const updatedEmployee = await prisma.employee.update({
         where: {id},
         data: {...employeeToUpdate},
     });
@@ -59,7 +93,7 @@ const editEmployee = async(req: Request, res: Response) => {
 
 
 const getAllEmployees = async(req: Request, res: Response) => {
-    const employees = await db.employee.findMany({
+    const employees = await prisma.employee.findMany({
         include: {
             department: true,
         }
@@ -72,7 +106,7 @@ const getAllEmployees = async(req: Request, res: Response) => {
 const getEmployeeById = async(req: Request, res: Response) => {
     const {id} = req.params;
     
-    const employee = await db.employee.findUnique({
+    const employee = await prisma.employee.findUnique({
         where: {id},
         include: {
             department: true,

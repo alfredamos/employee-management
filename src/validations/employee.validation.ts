@@ -3,7 +3,7 @@ import {Employee} from "../models/employee.model";
 
 const employeeSchema = Joi.object({
     fullName: Joi.string().required(),
-    email: Joi.string().required(),
+    email: Joi.string().required().email(),
     phone: Joi.string().required(),
 });
 

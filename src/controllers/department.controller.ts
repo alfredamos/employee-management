@@ -1,14 +1,19 @@
-import { db } from "../db";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response} from "express";
 import { StatusCodes } from "http-status-codes";
 import createError from "http-errors";
 import { Department } from "../models/department.model";
 
+const prisma = new PrismaClient();
+
 const createDepartment = async(req: Request, res: Response) => {
     const {body: departToUpdate} = req;
     const department = departToUpdate as Department;
 
-    const createdDepartment = await db.department.create({
+    console.log("dept: ", department);
+    //console.log("prisma : ", prisma);
+
+    const createdDepartment = await prisma.department.create({
         data: {...department},
     });
 
@@ -19,7 +24,7 @@ const createDepartment = async(req: Request, res: Response) => {
 const deleteDepartment = async(req: Request, res: Response) => {
     const {id} = req.params;
     
-    const department = await db.department.findUnique({
+    const department = await prisma.department.findUnique({
         where: {id},
     });
 
@@ -27,7 +32,7 @@ const deleteDepartment = async(req: Request, res: Response) => {
         throw createError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
     }
 
-    const deletedDepartment = await db.department.delete({
+    const deletedDepartment = await prisma.department.delete({
         where: {id},
     })
 
@@ -41,7 +46,7 @@ const editDepartment = async(req: Request, res: Response) => {
 
     const {id} = req.params;
     
-    const department = await db.department.findUnique({
+    const department = await prisma.department.findUnique({
         where: {id},
     });
 
@@ -49,7 +54,7 @@ const editDepartment = async(req: Request, res: Response) => {
         throw createError(StatusCodes.NOT_FOUND, `Department with id = ${id} is not found.`);
     }
 
-    const updatedDepartment = await db.department.update({
+    const updatedDepartment = await prisma.department.update({
         where: {id},
         data: {...departmentToUpdate},
     });
@@ -59,7 +64,7 @@ const editDepartment = async(req: Request, res: Response) => {
 
 
 const getAllDepartments = async(req: Request, res: Response) => {
-    const departments = await db.department.findMany({
+    const departments = await prisma.department.findMany({
         include: {
             employees: true,
         }
@@ -72,10 +77,10 @@ const getAllDepartments = async(req: Request, res: Response) => {
 const getDepartmentById = async(req: Request, res: Response) => {
     const {id} = req.params;
     
-    const department = await db.department.findUnique({
+    const department = await prisma.department.findUnique({
         where: {id},
         include: {
-            department: true,
+            employees: true,
         }
     });
 

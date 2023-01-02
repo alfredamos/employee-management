@@ -5,11 +5,11 @@ require("express-async-errors");
 
 dotenv.config();
 
-import departmentRoute from "./src/routes/department.route";
-import employeeRoute from "./src/routes/employee.route";
+import departmentRoute from "./routes/department.route";
+import employeeRoute from "./routes/employee.route";
 
-import {notFoundRouteMiddleware} from "./src/middleware/not-found-route.middleware";
-import {errorHandlerMiddleware} from "./src/middleware/error-handler.middleware";
+import {notFoundRouteMiddleware} from "./middleware/not-found-route.middleware";
+import {errorHandlerMiddleware} from "./middleware/error-handler.middleware";
 
 const app = express();
 const Port = process.env.PORT || 3000;
