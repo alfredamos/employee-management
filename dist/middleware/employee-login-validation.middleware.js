@@ -13,8 +13,9 @@ const employeeLoginValidationMiddleware = (req, res, next) => {
     const { error, value } = (0, employee_login_validation_1.employeeLoginValidation)(employee);
     if (error) {
         let errorMessages;
-        errorMessages = error.details.map(err => err.message).join('. ');
-        throw (0, http_errors_1.default)(http_status_codes_1.StatusCodes.BAD_REQUEST, `${errorMessages} - please provides all required values.`);
+        errorMessages = error.details.map((err) => err.message).join(". ");
+        next((0, http_errors_1.default)(http_status_codes_1.StatusCodes.BAD_REQUEST, `${errorMessages} - please provides all required values.`));
+        return;
     }
     next();
     return value;

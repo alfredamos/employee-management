@@ -7,8 +7,12 @@ const department_controller_1 = require("../controllers/department.controller");
 const department_validation_middleware_1 = require("../middleware/department-validation.middleware");
 const router = (0, express_1.Router)();
 router.route('/')
-    .get(check_if_authenticated_middleware_1.checkIfAuthenticatedMiddleware, department_controller_1.getAllDepartments)
-    .post(department_validation_middleware_1.departmentValidationMiddleware, check_if_authenticated_middleware_1.checkIfAuthenticatedMiddleware, check_if_admin_middleware_1.checkIfAdmin, department_controller_1.createDepartment);
+    .get(
+// checkIfAuthenticatedMiddleware, 
+department_controller_1.getAllDepartments)
+    .post(department_validation_middleware_1.departmentValidationMiddleware, 
+// checkIfAuthenticatedMiddleware, checkIfAdmin, 
+department_controller_1.createDepartment);
 router
     .route("/:id")
     .delete(check_if_authenticated_middleware_1.checkIfAuthenticatedMiddleware, check_if_admin_middleware_1.checkIfAdmin, department_controller_1.deleteDepartment)

@@ -15,6 +15,7 @@ CREATE TABLE `employees` (
     `password` VARCHAR(255) NOT NULL,
     `birthDate` DATETIME(3) NOT NULL,
     `gender` ENUM('Female', 'Male') NOT NULL,
+    `userType` ENUM('Staff', 'Admin', 'Management') NOT NULL DEFAULT 'Staff',
     `departmentId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `employees_email_key`(`email`),

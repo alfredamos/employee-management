@@ -11,10 +11,11 @@ export const checkIfAuthenticatedMiddleware = (
   const authJwtToken = req?.headers?.authorization?.split(" ")[1];
 
   //----> Empty authJwtToken
-  if(!authJwtToken){
-    throw catchError(StatusCodes.FORBIDDEN, 'Invalid credentials');
+  if (!authJwtToken) {
+    next(catchError(StatusCodes.FORBIDDEN, "Invalid credentials"));
+    return;
   }
-  
+
   verifyJwtToken(authJwtToken)
     .then((employeeInfo) => {
       req["employeeInfo"] = employeeInfo;
@@ -22,11 +23,9 @@ export const checkIfAuthenticatedMiddleware = (
       next();
       return;
     })
-    .catch((err) => {
-       console.log("I'm in second");       
-       //next(new JsonWebTokenError("Invalid credentials", err)); //---> Jwt webToken error. 
-       next(catchError(StatusCodes.FORBIDDEN, "Invalid credentials"));
-       return;
+    .catch((err) => {      
+      next(catchError(StatusCodes.FORBIDDEN, "Invalid credentials"));
+      return;
     });
 };
 

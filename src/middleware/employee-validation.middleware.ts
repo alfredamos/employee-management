@@ -17,16 +17,15 @@ export const employeeValidationMiddleware = (
   if (error) {
     let errorMessages: string;
 
-    /* for (const err of error.details) {
-      errorMessages.push(err.message);
-    } */
+    errorMessages = error.details.map((err) => err.message).join(". ");
 
-    errorMessages = error.details.map(err => err.message).join('. ');
-
-    throw createError(
-      StatusCodes.BAD_REQUEST,
-      `${errorMessages} - please provides all required values.`
+    next(
+      createError(
+        StatusCodes.BAD_REQUEST,
+        `${errorMessages} - please provides all required values.`
+      )
     );
+    return;
   }
 
   next();

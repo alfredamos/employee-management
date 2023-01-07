@@ -20,8 +20,6 @@ const prisma = new client_1.PrismaClient();
 const createDepartment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body: departToUpdate } = req;
     const department = departToUpdate;
-    console.log("dept: ", department);
-    //console.log("prisma : ", prisma);
     const createdDepartment = yield prisma.department.create({
         data: Object.assign({}, department),
     });

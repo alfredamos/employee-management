@@ -11,13 +11,12 @@ export const departmentValidationMiddleware = (req: Request, res: Response, next
     const {error, value} = departmentValidation(department);
 
     if (error){
-        let errorMessages: string[] = [];
+        let errorMessages: string;
 
-        for (const err of error.details){
-            errorMessages.push(err.message);
-        }
+        errorMessages = error.details.map(err => err.message).join('. ');
 
-        throw createError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provides all required values.`);
+        next(createError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provides all required values.`));
+        return;
     }
 
     next();

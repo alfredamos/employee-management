@@ -19,11 +19,11 @@ const router = Router();
 
 router.route('/')
     .get(
-        checkIfAuthenticatedMiddleware, 
+       // checkIfAuthenticatedMiddleware, 
         getAllDepartments)
     .post(
         departmentValidationMiddleware, 
-        checkIfAuthenticatedMiddleware, checkIfAdmin, 
+       // checkIfAuthenticatedMiddleware, checkIfAdmin, 
         createDepartment);
 
 router

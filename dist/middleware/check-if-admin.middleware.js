@@ -10,7 +10,8 @@ const http_status_codes_1 = require("http-status-codes");
 const checkIfAdmin = (req, res, next) => {
     const userInfo = req['employeeInfo'];
     if (userInfo.userType !== client_1.UserType.Admin) {
-        throw (0, http_errors_1.default)(http_status_codes_1.StatusCodes.UNAUTHORIZED, 'You are not authorized to perform this task.');
+        next((0, http_errors_1.default)(http_status_codes_1.StatusCodes.UNAUTHORIZED, 'You are not authorized to perform this task.'));
+        return;
     }
     next();
 };

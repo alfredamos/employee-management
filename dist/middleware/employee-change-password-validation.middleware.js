@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.employeeValidationMiddleware = void 0;
+exports.employeeChangePasswordValidationMiddleware = void 0;
 const http_errors_1 = __importDefault(require("http-errors"));
 const http_status_codes_1 = require("http-status-codes");
-const employee_validation_1 = require("../validations/employee.validation");
-const employeeValidationMiddleware = (req, res, next) => {
-    const { body: employ } = req;
-    const employee = employ;
-    const { error, value } = (0, employee_validation_1.employeeValidation)(employee);
+const employee_change_password_validation_1 = require("../validations/employee-change-password.validation");
+const employeeChangePasswordValidationMiddleware = (req, res, next) => {
+    const { body: employee } = req;
+    const employeeVar = employee;
+    const { error, value } = (0, employee_change_password_validation_1.employeeChangePasswordValidation)(employeeVar);
     if (error) {
         let errorMessages;
         errorMessages = error.details.map((err) => err.message).join(". ");
@@ -20,4 +20,4 @@ const employeeValidationMiddleware = (req, res, next) => {
     next();
     return value;
 };
-exports.employeeValidationMiddleware = employeeValidationMiddleware;
+exports.employeeChangePasswordValidationMiddleware = employeeChangePasswordValidationMiddleware;

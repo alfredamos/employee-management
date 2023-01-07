@@ -10,9 +10,6 @@ const createDepartment = async(req: Request, res: Response) => {
     const {body: departToUpdate} = req;
     const department = departToUpdate as Department;
 
-    console.log("dept: ", department);
-    //console.log("prisma : ", prisma);
-
     const createdDepartment = await prisma.department.create({
         data: {...department},
     });

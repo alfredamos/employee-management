@@ -9,6 +9,7 @@ export class Employee {
     birthDate!: Date;
     gender!: Gender;
     password!: string;
+    newPassword?: string;
     departmentId!: string;
     userType!: UserType;
 

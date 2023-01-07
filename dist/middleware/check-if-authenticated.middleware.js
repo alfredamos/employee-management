@@ -44,7 +44,8 @@ const checkIfAuthenticatedMiddleware = (req, res, next) => {
     const authJwtToken = (_b = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1];
     //----> Empty authJwtToken
     if (!authJwtToken) {
-        throw (0, http_errors_1.default)(http_status_codes_1.StatusCodes.FORBIDDEN, 'Invalid credentials');
+        next((0, http_errors_1.default)(http_status_codes_1.StatusCodes.FORBIDDEN, "Invalid credentials"));
+        return;
     }
     verifyJwtToken(authJwtToken)
         .then((employeeInfo) => {
@@ -53,8 +54,6 @@ const checkIfAuthenticatedMiddleware = (req, res, next) => {
         return;
     })
         .catch((err) => {
-        console.log("I'm in second");
-        //next(new JsonWebTokenError("Invalid credentials", err)); //---> Jwt webToken error. 
         next((0, http_errors_1.default)(http_status_codes_1.StatusCodes.FORBIDDEN, "Invalid credentials"));
         return;
     });
@@ -72,4 +71,4 @@ class JsonWebTokenError extends jwt.JsonWebTokenError {
         super(message, err);
         this.name = "JsonWebTokenError";
     }
-} */ 
+} */

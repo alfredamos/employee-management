@@ -1,18 +1,17 @@
 import createError from "http-errors";
-import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Employee } from "../models/employee.model";
-import { employeeLoginValidation } from "../validations/employee-login.validation";
+import { employeeProfileValidation } from "../validations/employee-profile.validation";
+import { Request, Response, NextFunction } from "express";
 
-export const employeeLoginValidationMiddleware = (
+export const employeeProfileValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { body: employ } = req;
-  const employee = employ as Employee;
-
-  const { error, value } = employeeLoginValidation(employee);
+  const { body: employee } = req;
+  const employeeVar = employee as Employee;
+  const { error, value } = employeeProfileValidation(employeeVar);
 
   if (error) {
     let errorMessages: string;
